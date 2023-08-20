@@ -19,35 +19,41 @@ export default function HomeScreen() {
       <StatusBar />
 
       <Image 
-        source={require('../assets/images/beansBackground1.png')} 
+        source={require('../assets/images/bg1.jpg')} 
         style={{height: height*0.2}} 
-        className="w-full absolute -top-5 opacity-10" />
+        className="w-full absolute -top-5 " />
       <SafeAreaView className={ios? '-mb-8': ''}>
-        {/* avatar and bell icon */}
-        <View className="mx-4 flex-row justify-between items-center">
-          <Image source={require('../assets/images/avatar.png')} 
-            className="h-9 w-9 rounded-full" />
+
+        {/* University Logo and Name */}
+
+        <View className="mx-4 flex-row  items-center space-x-20">
+          <Image source={require('../assets/images/uni_logo.png')} 
+            className="h-11 w-9" />
           
           <View className="flex-row items-center space-x-2">
-            <MapPinIcon size="25" color={themeColors.bgLight} />
+            <MapPinIcon size="25" color={themeColors.bgred} />
             <Text className="font-semibold text-base">
-              New York, NYC
+              Bennett University
             </Text>
           </View>
-          <BellIcon size="27" color="black" />
+          
         </View>
-        {/* search bar */}
+
+        {/* Search Bar */}
+
         <View className="mx-5 shadow" style={{marginTop: height*0.06}}>
           <View className="flex-row items-center rounded-full p-1 bg-[#e6e6e6]">
             <TextInput placeholder='Search' className="p-4 flex-1 font-semibold text-gray-700" />
             <TouchableOpacity 
               className="rounded-full p-2" 
-              style={{backgroundColor: themeColors.bgLight}}>
+              style={{backgroundColor: themeColors.bgred}}>
               <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
             </TouchableOpacity>
           </View>
         </View>
+
         {/* categories */}
+
         <View className="px-5 mt-6">
           <FlatList 
             horizontal
@@ -61,7 +67,7 @@ export default function HomeScreen() {
               return (
                 <TouchableOpacity 
                 onPress={()=> setActiveCategory(item.id)}
-                style={{backgroundColor: isActive? themeColors.bgLight: 'rgba(0,0,0,0.07)'}} 
+                style={{backgroundColor: isActive? themeColors.bgblue: 'rgba(0,0,0,0.07)'}} 
                 className="p-4 px-5 mr-2 rounded-full shadow">
                   <Text className={"font-semibold " + activeTextClass}>{item.title}</Text>
                 </TouchableOpacity>
