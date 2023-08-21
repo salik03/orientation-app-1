@@ -24,7 +24,8 @@ export default function HomeScreen() {
       return (
         item.tag1 === categories[activeCategory - 1].title.toLowerCase() ||
         item.tag2 === categories[activeCategory - 1].title.toLowerCase() ||
-        item.tag3 === categories[activeCategory - 1].title.toLowerCase()
+        item.tag3 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag4 === categories[activeCategory - 1].title.toLowerCase()
       );
     });
     setFilteredCoffeeItems(filteredItems);
@@ -34,17 +35,18 @@ export default function HomeScreen() {
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar />
 
-      <Image
-        source={require('../assets/images/bg1.jpg')}
-        style={{ height: height * 0.9, borderBottomLeftRadius: 60, borderBottomRightRadius: 60, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-        resizeMode="cover"
-      />
+      <Image 
+        source={require('../assets/images/bg1.jpg')} 
+        style={{height: height*0.9,  borderBottomLeftRadius: 60, borderBottomRightRadius: 60}} 
+        className="w-full absolute -top-5 " 
+        blurRadius={15}/>
 
       <SafeAreaView style={ios ? { marginBottom: -8 } : {}}>
 
         {/* University Logo and Name */}
-        <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: ios ? 16 : 32 }}>
-          <Image source={require('../assets/images/uni_logo.png')} style={{ height: 44, width: 36 }} />
+        <View className="mx-4 flex-row  items-center space-x-20">
+          <Image source={require('../assets/images/uni_logo.png')} 
+            className="h-11 w-9" />
           <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
             <MapPinIcon size={25} color={themeColors.bgred} />
             <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Bennett University</Text>
@@ -56,7 +58,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Adding Categories */}
-        <View style={{ paddingHorizontal: 16, marginTop: 24 }}>
+        <View style={{ paddingHorizontal: 16, marginTop: 24, marginBottom: 50 }}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             {categories.map(item => (
               <TouchableOpacity

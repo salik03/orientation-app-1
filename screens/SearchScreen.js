@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Dimensions, StyleSheet, Image } from 'react-native';
 import { coffeeItems } from '../constants';
+import { themeColors } from '../theme';
+import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,13 +13,16 @@ export default function SearchScreen() {
   const handleSearch = () => {
     const results = coffeeItems.filter(item =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      // item.tag1.toLowerCase().includes(searchQuery.toLowerCase()),
+      // item.tag2.toLowerCase().includes(searchQuery.toLowerCase()),
+      // item.tag3.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(results);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
+    <View className="mx-5 shadow" style={{marginTop: height*0.06}}>
+      <View className="flex-row items-center rounded-full p-1 bg-[#e6e6e6]">
         <View style={styles.searchInputContainer}>
           <TextInput
             placeholder='Search for clubs and chapters...'
@@ -26,10 +31,10 @@ export default function SearchScreen() {
             value={searchQuery}
           />
           <TouchableOpacity
-            style={styles.searchButton}
-            onPress={handleSearch}
-          >
-            <Text style={styles.searchButtonText}>Search</Text>
+            className="rounded-full p-2"
+            style={{backgroundColor: themeColors.bgred}}
+            onPress={handleSearch}>
+            <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
       </View>
