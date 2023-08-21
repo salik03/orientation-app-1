@@ -6,7 +6,7 @@ import { StarIcon } from 'react-native-heroicons/solid';
 import { PlusIcon,ArrowRightIcon } from 'react-native-heroicons/outline';
 const {width, height} = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
-export default function CoffeeCard({item}) {
+export default function ChapterCard({item}) {
   const navigation = useNavigation();
   return (
 

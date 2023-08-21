@@ -1,103 +1,101 @@
-import { View, Text, Image, TouchableOpacity, TextInput, FlatList, Dimensions, Platform } from 'react-native'
-import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import {themeColors} from '../theme';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, TextInput, FlatList, Dimensions, Platform, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { themeColors } from '../theme';
 import { StatusBar } from 'expo-status-bar';
 import { categories, coffeeItems } from '../constants';
 import Carousel from 'react-native-snap-carousel';
-import CoffeeCard from '../components/coffeeCard';
-import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline'
-import { MapPinIcon } from 'react-native-heroicons/solid'
+import { MapPinIcon } from 'react-native-heroicons/solid';
+import ChapterCard from '../components/chapterCard';
+import { useNavigation } from '@react-navigation/native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const ios = Platform.OS == 'ios';
+
 export default function HomeScreen() {
   const [activeCategory, setActiveCategory] = useState(1);
+  const [filteredCoffeeItems, setFilteredCoffeeItems] = useState([]);
+  const navigation = useNavigation();
+
+  // Update filteredCoffeeItems when activeCategory changes
+  
+  useEffect(() => {
+    const filteredItems = coffeeItems.filter(item => {
+      return (
+        item.tag1 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag2 === categories[activeCategory - 1].title.toLowerCase() ||
+        item.tag3 === categories[activeCategory - 1].title.toLowerCase()
+      );
+    });
+    setFilteredCoffeeItems(filteredItems);
+  }, [activeCategory]);
 
   return (
-    <View className="flex-1 relative bg-white">
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar />
 
-      <Image 
-        source={require('../assets/images/bg1.jpg')} 
-        style={{height: height*0.2}} 
-        className="w-full absolute -top-5 " />
-      <SafeAreaView className={ios? '-mb-8': ''}>
+      <Image
+        source={require('../assets/images/bg1.jpg')}
+        style={{ height: height * 0.9, borderBottomLeftRadius: 60, borderBottomRightRadius: 60, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+        resizeMode="cover"
+      />
+
+      <SafeAreaView style={ios ? { marginBottom: -8 } : {}}>
 
         {/* University Logo and Name */}
-
-        <View className="mx-4 flex-row  items-center space-x-20">
-          <Image source={require('../assets/images/uni_logo.png')} 
-            className="h-11 w-9" />
-          
-          <View className="flex-row items-center space-x-2">
-            <MapPinIcon size="25" color={themeColors.bgred} />
-            <Text className="font-semibold text-base">
-              Bennett University
-            </Text>
-          </View>
-          
-        </View>
-
-        {/* Search Bar */}
-
-        <View className="mx-5 shadow" style={{marginTop: height*0.06}}>
-          <View className="flex-row items-center rounded-full p-1 bg-[#e6e6e6]">
-            <TextInput placeholder='Search' className="p-4 flex-1 font-semibold text-gray-700" />
-            <TouchableOpacity 
-              className="rounded-full p-2" 
-              style={{backgroundColor: themeColors.bgred}}>
-              <MagnifyingGlassIcon size="25" strokeWidth={2} color="white" />
-            </TouchableOpacity>
+        <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: ios ? 16 : 32 }}>
+          <Image source={require('../assets/images/uni_logo.png')} style={{ height: 44, width: 36 }} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
+            <MapPinIcon size={25} color={themeColors.bgred} />
+            <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Bennett University</Text>
           </View>
         </View>
 
-        {/* categories */}
-
-        <View className="px-5 mt-6">
-          <FlatList 
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={categories}
-            keyExtractor={item=> item.id}
-            className="overflow-visible"
-            renderItem={({item})=>{
-              isActive = item.id==activeCategory;
-              let activeTextClass = isActive? 'text-white': 'text-gray-700';
-              return (
-                <TouchableOpacity 
-                onPress={()=> setActiveCategory(item.id)}
-                style={{backgroundColor: isActive? themeColors.bgblue: 'rgba(0,0,0,0.07)'}} 
-                className="p-4 px-5 mr-2 rounded-full shadow">
-                  <Text className={"font-semibold " + activeTextClass}>{item.title}</Text>
-                </TouchableOpacity>
-              )
-            }}
-          />
+        <View style={{ marginHorizontal: 16, shadowColor: 'rgba(0, 0, 0, 0.2)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 1, shadowRadius: 2, marginTop: 16 }}>
+          <Text style={{ fontSize: 40, fontWeight: 'bold', color: themeColors.textNeutral }}>Let's Discover</Text>
         </View>
-          
+
+        {/* Adding Categories */}
+        <View style={{ paddingHorizontal: 16, marginTop: 24 }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {categories.map(item => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => setActiveCategory(item.id)}
+                style={{
+                  backgroundColor: item.id === activeCategory ? themeColors.bgblue : 'rgba(0,0,0,0.07)',
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 24,
+                  marginRight: 8,
+                  shadowColor: 'rgba(0, 0, 0, 0.2)',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 1,
+                  shadowRadius: 2,
+                }}
+              >
+                <Text style={{ fontWeight: 'bold', color: item.id === activeCategory ? 'white' : 'gray' }}>{item.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+
       </SafeAreaView>
 
-      {/* coffee cards */}
-      <View className={`overflow-visible flex justify-center flex-1 ${ios? 'mt-10':''}`}>
-        <View>
-          <Carousel
-            containerCustomStyle={{overflow: 'visible'}}
-            data={coffeeItems}
-            renderItem={({item})=> <CoffeeCard item={item} />}
-            firstItem={1}
-            loop={true}
-            inactiveSlideScale={0.75}
-            inactiveSlideOpacity={0.75}
-            sliderWidth={width}
-            itemWidth={width*0.63}
-            slideStyle={{display: 'flex', alignItems: 'center'}}
-          />
-        </View>
-        
+      {/* Adding Chapters/Clubs cards */}
+      <View style={{ flex: 1, justifyContent: 'center', marginTop: ios ? 32 : 0 }}>
+        <Carousel
+          data={filteredCoffeeItems}
+          renderItem={({ item }) => <ChapterCard item={item} />}
+          firstItem={1}
+          loop={true}
+          inactiveSlideScale={0.75}
+          inactiveSlideOpacity={0.75}
+          sliderWidth={width}
+          itemWidth={width * 0.63}
+          slideStyle={{ alignItems: 'center' }}
+        />
       </View>
-      
-      
     </View>
-  )
+  );
 }
